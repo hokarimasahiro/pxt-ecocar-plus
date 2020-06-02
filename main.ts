@@ -24,7 +24,7 @@ enum RGBColors {
     Black = 0x000000
 }
 /**
- * Functions to operate NeoPixel strips.
+ * Functions to operate ecocar-plus.
  */
 //% weight=5 color=#c0c000 icon="\uf1b9"
 namespace ecocar {
@@ -34,11 +34,50 @@ namespace ecocar {
     let I2Caddress = 0x10;
 
     /**
+     * set line brightness threshold. 
+     * @param threshold
+     */
+    //% blockId="set line brightness threshold" block="set threshold %threshold" 
+    export function set_threshold(threshold: number) {
+        let buf = pins.createBuffer(3);
+        buf[0] = 0x45;
+        buf[1] = threshold & 0xff;
+        buf[2] = threshold >> 8;
+        pins.i2cWriteBuffer(I2Caddress, buf);
+    }
+
+    /**
+     * set sonic speed. 
+     * @param speed
+     */
+    //% blockId="set sonic speed" block="set sonic speed %speed" 
+    export function set_sonic_speed(speed: number) {
+        let buf = pins.createBuffer(3);
+        buf[0] = 0x46;
+        buf[1] = speed & 0xff;
+        buf[2] = speed >> 8;
+        pins.i2cWriteBuffer(I2Caddress, buf);
+    }
+
+    /**
+     * set motor collection value. 
+     * @param left
+     * @param right
+     */
+    //% blockId="set motor collection value" block="set collection value%left %right" 
+    export function set_collection_value(left: number,right:number) {
+        let buf = pins.createBuffer(3);
+        buf[0] = 0x46;
+        buf[1] = left;
+        buf[2] = right;
+        pins.i2cWriteBuffer(I2Caddress, buf);
+    }
+
+    /**
      * Shows all LEDs to a given color (range 0-255 for r, g, b). 
      * @param rgb RGB color of the LED
      */
-    //% blockId="set_strip_color" block="show color %rgb=neopixel_colors" 
-    //% weight=85 blockGap=8
+    //% blockId="show all LEDs" block="show color %rgb=neopixel_colors" 
     export function showColor(rgb: number) {
         rgb = rgb >> 0;
         setAllRGB(rgb);
@@ -51,10 +90,8 @@ namespace ecocar {
      * @param pixeloffset position of the NeoPixel in the strip
      * @param rgb RGB color of the LED
      */
-    //% blockId="set_pixel_color" block="set pixel color at %pixeloffset|to %rgb=neopixel_colors" 
-    //% blockGap=8
-    //% weight=80
-    export function setPixelColor(pixeloffset: number, rgb: number): void {
+    //% blockId="show pixel color" block="sow pixel color at %pixeloffset|to %rgb=neopixel_colors" 
+    export function showPixelColor(pixeloffset: number, rgb: number): void {
         if (pixeloffset >= neocount) return;
 
         let red = unpackR(rgb);
@@ -86,8 +123,7 @@ namespace ecocar {
     /**
      * Send all the changes to the strip.
      */
-    //% blockId="show" block="show" blockGap=8
-    //% weight=79
+    //% blockId="show" block="show"
     export function show() {
         neobuf[0] = 0x80;
         pins.i2cWriteBuffer(I2Caddress, neobuf)
@@ -96,21 +132,18 @@ namespace ecocar {
 
     /**
      * Turn off all LEDs.
-     * You need to call ``show`` to make the changes visible.
      */
     //% blockId="clear" block="clear"
-    //% weight=76
     export function clear(): void {
         for (let i = 1; i <= neocount * 3; i++) neobuf[i] = 0x00;
         show();
     }
 
     /**
-     * Set the brightness of the strip. This flag only applies to future operation.
+     * Set the brightness of the LEDs.
      * @param brightness a measure of LED brightness in 0-255. eg: 255
      */
-    //% blockId="set_brightness" block="set brightness %brightness" blockGap=8
-    //% weight=59
+    //% blockId="set_brightness" block="set brightness %brightness"
     export function setBrightness(brightness: number): void {
         Brightness = brightness;
     }
@@ -137,7 +170,6 @@ namespace ecocar {
      * @param green value of the green channel between 0 and 255. eg: 255
      * @param blue value of the blue channel between 0 and 255. eg: 255
      */
-    //% weight=1
     //% blockId="neopixel_rgb" block="red %red|green %green|blue %blue"
     export function rgb(red: number, green: number, blue: number): number {
         return packRGB(red, green, blue);
@@ -146,7 +178,6 @@ namespace ecocar {
     /**
      * Gets the RGB value of a known color
     */
-    //% weight=2 blockGap=8
     //% blockId="neopixel_colors" block="%color"
     export function colors(color: RGBColors): number {
         return color;
