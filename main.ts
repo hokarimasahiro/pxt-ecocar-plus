@@ -74,6 +74,36 @@ namespace ecocar {
     }
 
     /**
+     * motor run. 
+     * @param left
+     * @param right
+     */
+    //% blockId="motor run" block="motor run left speed=%left right speed=%right" 
+    export function motor_run(left: number,right:number) {
+        let buf = pins.createBuffer(3);
+
+        buf[0] = 0x00;
+        if(left>=0){
+            buf[1] = 0;
+            buf[2] = left;
+        } else{
+            buf[1] = 1;
+            buf[2] = -left;
+        }
+        pins.i2cWriteBuffer(I2Caddress, buf);
+
+        buf[0] = 0x02;
+        if(right>=0){
+            buf[1] = 0;
+            buf[2] = right;
+        } else{
+            buf[1] = 1;
+            buf[2] = -right;
+        }
+        pins.i2cWriteBuffer(I2Caddress, buf);
+    }
+
+    /**
      * Shows all LEDs to a given color (range 0-255 for r, g, b). 
      * @param rgb RGB color of the LED
      */
