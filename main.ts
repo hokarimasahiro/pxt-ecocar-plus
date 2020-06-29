@@ -113,7 +113,7 @@ namespace ecocar {
         let buf=pins.i2cReadBuffer(I2Caddress, verlen);
         let rstring="";
         for(let i=0;i<verlen;i++){
-            rstring = rstring + buf[i];
+            rstring += String.fromCharCode( buf[i]);
         }
         return rstring;
     }
