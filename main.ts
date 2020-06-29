@@ -100,6 +100,7 @@ namespace ecocar {
         }
         buf[6] = 1;
         pins.i2cWriteBuffer(I2Caddress, buf);
+        pins.i2cWriteBuffer(I2Caddress, buf);
     }
 
     /**
