@@ -80,7 +80,7 @@ namespace ecocar {
      */
     //% blockId="motor run" block="motor run left speed=%left right speed=%right" 
     export function motor_run(left: number,right:number) {
-        let buf = pins.createBuffer(5);
+        let buf = pins.createBuffer(7);
 
         buf[0] = 0x00;
         if(left>=0){
@@ -90,13 +90,15 @@ namespace ecocar {
             buf[1] = 1;
             buf[2] = -left;
         }
+        buf[3] = 1;
         if(right>=0){
-            buf[3] = 0;
-            buf[4] = right;
+            buf[4] = 0;
+            buf[5] = right;
         } else{
-            buf[3] = 1;
-            buf[4] = -right;
+            buf[4] = 1;
+            buf[5] = -right;
         }
+        buf[6] = 1;
         pins.i2cWriteBuffer(I2Caddress, buf);
     }
 
