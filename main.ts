@@ -102,6 +102,21 @@ namespace ecocar {
         pins.i2cWriteBuffer(I2Caddress, buf);
         pins.i2cWriteBuffer(I2Caddress, buf);
     }
+    /**
+     * get ver string. 
+     */
+    //% blockId="get ver string" block="get ver string" 
+    export function get_ver_string(): string{
+        pins.i2cWriteNumber(I2Caddress, 0x32, NumberFormat.Int8LE);
+        let verlen=pins.i2cReadNumber(I2Caddress, NumberFormat.Int8LE);
+        pins.i2cWriteNumber(I2Caddress, 0x31, NumberFormat.Int8LE)
+        let buf=pins.i2cReadBuffer(I2Caddress, verlen);
+        let rstring="";
+        for(let i=0;i<verlen;i++){
+            rstring = rstring + buf[i];
+        }
+        return rstring;
+    }
 
     /**
      * Shows all LEDs to a given color (range 0-255 for r, g, b). 
