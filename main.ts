@@ -142,7 +142,7 @@ namespace porocar {
      * get line color. 
      * @param dir
      */
-    //% blockId="get line color" block="get line color %dir" 
+    //% blockId="get line color" block="get line color %dir=Dir" 
     export function get_line_color(dir:Dir): number{
         pins.i2cWriteNumber(I2Caddress, 0x41, NumberFormat.Int8LE);
         if(dir == Dir.Left)
@@ -155,7 +155,7 @@ namespace porocar {
      * get line brightness. 
      * @param dir
      */
-    //% blockId="get line brightness" block="get line brightness %dir" 
+    //% blockId="get line brightness" block="get line brightness %dir=Dir" 
     export function get_line_brightness(dir:Dir): number{
         pins.i2cWriteNumber(I2Caddress, 0x42, NumberFormat.Int8LE);
         if(dir == Dir.Left)
@@ -168,7 +168,7 @@ namespace porocar {
      * get distance. 
      * @param unit
      */
-    //% blockId="get distance" block="get distance %unit" 
+    //% blockId="get distance" block="get distance %unit=Dunit" 
     export function get_distance(unit:Dunit): number{
         if (unit == Dunit.mm)
             pins.i2cWriteNumber(I2Caddress, 0x43, NumberFormat.Int8LE);
