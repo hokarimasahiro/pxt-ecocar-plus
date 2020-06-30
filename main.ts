@@ -143,7 +143,7 @@ namespace porocar {
      * @param dir
      */
     //% blockId="get line color" block="get line color %dir=Dir" 
-    export function get_line_color(dir:Dir): number{
+    export function get_line_color(dir:number): number{
         pins.i2cWriteNumber(I2Caddress, 0x41, NumberFormat.Int8LE);
         if(dir == Dir.Left)
             return pins.i2cReadNumber(I2Caddress, NumberFormat.Int16LE) & 0xff;
