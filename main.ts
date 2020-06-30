@@ -142,7 +142,7 @@ namespace porocar {
      * get line color. 
      * @param dir
      */
-    //% blockId="get line color" block="get line color %dir=Dir" 
+    //% blockId="get line color" block="get line color %dir=Direction" 
     export function get_line_color(dir:number): number{
         pins.i2cWriteNumber(I2Caddress, 0x41, NumberFormat.Int8LE);
         if(dir == Dir.Left)
@@ -155,8 +155,8 @@ namespace porocar {
      * get line brightness. 
      * @param dir
      */
-    //% blockId="get line brightness" block="get line brightness %dir=Dir" 
-    export function get_line_brightness(dir:Dir): number{
+    //% blockId="get line brightness" block="get line brightness %dir=Direction" 
+    export function get_line_brightness(dir:Number): number{
         pins.i2cWriteNumber(I2Caddress, 0x42, NumberFormat.Int8LE);
         if(dir == Dir.Left)
             return pins.i2cReadNumber(I2Caddress, NumberFormat.Int16LE) & 0xff;
@@ -286,6 +286,22 @@ namespace porocar {
     //% blockId="neopixel_colors" block="%color"
     export function colors(color: RGBColors): number {
         return color;
+    }
+
+    /**
+     * Gets the blcak or white color
+    */
+    //% blockId="Black_White_colors" block="%WBcolor"
+    export function WBcolors(color: WBcolor): number {
+        return color;
+    }
+
+    /**
+     * Gets the Direction
+    */
+    //% blockId="Direction" block="%Dirs"
+    export function Dirs(dir: Dir): number {
+        return dir;
     }
 
     function packRGB(a: number, b: number, c: number): number {
