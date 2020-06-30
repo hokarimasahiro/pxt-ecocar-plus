@@ -23,15 +23,35 @@ enum RGBColors {
     //% block=black
     Black = 0x000000
 }
+enum Dir{
+    //% block Left
+    Left = 1,
+    //% block Right
+    Right = 2
+}
+enum WBcolor{
+    //% block White
+    White = 1,
+    //% block Black
+    Black = 0
+}
+enum Dunit{
+    //% block mm
+    mm = 0,
+    //% block uS
+    uS = 1,
+    //% block inch
+    inch = 2
+}
 /**
  * Functions to operate ecocar-plus.
  */
 //% weight=5 color=#c0c000 icon="\uf1b9"
-namespace ecocar {
+namespace porocar {
     const neocount = 25;
     let neobuf = pins.createBuffer(neocount * 3 + 1);
     let Brightness = 0;
-    let I2Caddress = 0x10;
+    let I2Caddress = 0x20;
 
     /**
      * set line brightness threshold. 
@@ -113,9 +133,49 @@ namespace ecocar {
         let buf=pins.i2cReadBuffer(I2Caddress, verlen);
         let rstring="";
         for(let i=0;i<verlen;i++){
-            rstring += String.fromCharCode( buf[i]);
+            rstring += String.fromCharCode(buf[i]);
         }
         return rstring;
+    }
+
+    /**
+     * get line color. 
+     * @param dir
+     */
+    //% blockId="get line color" block="get line color %dir" 
+    export function get_line_color(dir:Dir): number{
+        pins.i2cWriteNumber(I2Caddress, 0x41, NumberFormat.Int8LE);
+        if(dir == Dir.Left)
+            return pins.i2cReadNumber(I2Caddress, NumberFormat.Int16LE) & 0xff;
+        else
+            return pins.i2cReadNumber(I2Caddress, NumberFormat.Int16LE) >> 8;
+    }
+
+    /**
+     * get line brightness. 
+     * @param dir
+     */
+    //% blockId="get line brightness" block="get line brightness %dir" 
+    export function get_line_brightness(dir:Dir): number{
+        pins.i2cWriteNumber(I2Caddress, 0x42, NumberFormat.Int8LE);
+        if(dir == Dir.Left)
+            return pins.i2cReadNumber(I2Caddress, NumberFormat.Int16LE) & 0xff;
+        else
+            return pins.i2cReadNumber(I2Caddress, NumberFormat.Int16LE) >> 8;
+    }
+
+    /**
+     * get distance. 
+     * @param unit
+     */
+    //% blockId="get distance" block="get distance %unit" 
+    export function get_distance(unit:Dunit): number{
+        if (unit == Dunit.mm)
+            pins.i2cWriteNumber(I2Caddress, 0x43, NumberFormat.Int8LE);
+        else
+            pins.i2cWriteNumber(I2Caddress, 0x44, NumberFormat.Int8LE);
+
+        return pins.i2cReadNumber(I2Caddress, NumberFormat.Int16LE);
     }
 
     /**
