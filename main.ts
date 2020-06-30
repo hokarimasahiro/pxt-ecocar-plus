@@ -24,15 +24,15 @@ enum RGBColors {
     Black = 0x000000
 }
 enum Dir{
-    //% block Left
+    //% block=Left
     Left = 1,
-    //% block Right
+    //% block=Right
     Right = 2
 }
 enum WBcolor{
-    //% block White
+    //% block=White
     White = 1,
-    //% block Black
+    //% block=Black
     Black = 0
 }
 enum Dunit{
